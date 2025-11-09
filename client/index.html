@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Collaborative Canvas</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="toolbar">
+    <button id="clear">Clear</button>
+    <button id="undo">Undo</button>
+    <button id="redo">Redo</button>
+    <button id="eraser">Eraser</button>
+    <label for="toolSelect" class="sr-only">Tool</label>
+    <select id="toolSelect" title="Select tool">
+      <option value="brush">Brush</option>
+      <option value="rect">Rectangle</option>
+      <option value="circle">Circle</option>
+      <option value="text">Text</option>
+      <option value="image">Image</option>
+    </select>
+    <input id="imageInput" type="file" accept="image/*" title="Upload image" />
+    <label for="colorPicker">Color</label>
+    <input type="color" id="colorPicker" value="#000000" title="Choose drawing color">
+
+    <label for="stroke">Stroke width</label>
+    <input type="range" id="stroke" min="1" max="20" value="3" title="Adjust stroke width">
+  </div>
+  <canvas id="canvas" aria-label="Collaborative drawing canvas" tabindex="0"></canvas>
+  <div id="cursors" aria-hidden="true"></div>
+  <ul id="users" aria-live="polite"></ul>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="websocket.js"></script>
+  <script src="canvas.js"></script>
+</body>
+</html>
