@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
+const { errorHandler, notFoundHandler } = require('./error-handler');
 
 const app = express();
 const server = http.createServer(app);
@@ -9,6 +10,10 @@ const io = new Server(server);
 
 // Serve static files from client folder
 app.use(express.static(path.join(__dirname, '../client')));
+
+// JSON body parser for API routes (if needed)
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Store drawing history using drawing-state module (stroke grouping)
 const drawingState = require('./drawing-state');
@@ -150,6 +155,12 @@ io.on('connection', (socket) => {
     socket.emit('initCanvas', drawingState.getHistoryFlat());
   });
 });
+
+// 404 handler for unmatched routes (must be after all routes)
+app.use(notFoundHandler);
+
+// Error handling middleware (must be last)
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
